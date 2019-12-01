@@ -19,7 +19,9 @@ class TodoList extends Component{
             <ul>
                 {
                     this.state.list.map((item,index) => {
-                    return <li key={index}>{item}</li>
+                    return (<li key={index}
+                                onClick={this.handleItemDelete.bind(this, index)}>
+                                    {item}</li>)
                     })
                 }
 
@@ -41,6 +43,17 @@ class TodoList extends Component{
             inputValue: ''
         })
 
+    }
+    handleItemDelete(index){
+        // immutable
+        // state not allow user do any change
+        const list = [...this.state.list];
+        list.splice(index, 1); // delete index
+
+        this.setState({
+            list: list
+        })
+        console.log(index)
     }
 }
 
