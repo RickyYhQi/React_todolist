@@ -6,7 +6,7 @@ class TodoList extends Component{
     constructor(props) {
         super(props);
         this.state = { //state 负责存储组件数据
-            inputValue: 'hello!!',
+            inputValue: '',
             list: []
         }
     }
@@ -15,10 +15,14 @@ class TodoList extends Component{
         <Fragment>
             <div><input value={this.state.inputValue}    
                         onChange={this.handleInputChange.bind(this)} />  {/* first line 写死只读 需要监听并改变this对象 */}
-            <button>submit</button></div>
+            <button onClick={this.handleBtnClick.bind(this)}>submit</button></div>
             <ul>
-                <li>learning english</li>
-                <li>learning react</li>
+                {
+                    this.state.list.map((item,index) => {
+                    return <li key={index}>{item}</li>
+                    })
+                }
+
             </ul>
         </Fragment>
     )
@@ -30,6 +34,13 @@ class TodoList extends Component{
         this.setState({
             inputValue: e.target.value
         })
+    }
+    handleBtnClick(){
+        this.setState({
+            list: [...this.state.list, this.state.inputValue], //展开运算符, 把以前的内容展开生成新的数组
+            inputValue: ''
+        })
+
     }
 }
 
