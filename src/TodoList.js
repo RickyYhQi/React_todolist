@@ -1,6 +1,6 @@
 import React, {Component,Fragment} from 'react';
-import './style.css';
 import TodoItem from './TodoItem';
+import './style.css';
 
 class TodoList extends Component{
     constructor(props) {
@@ -9,6 +9,9 @@ class TodoList extends Component{
             inputValue: '',
             list: []
         }
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleBtnClick = this.handleBtnClick.bind(this);
+        this.handleItemDelete = this.handleItemDelete.bind(this);
     }
     render(){
     return (
@@ -21,51 +24,51 @@ class TodoList extends Component{
                 <input  id='insertArea'
                         className='input'
                         value={this.state.inputValue}    
-                        onChange={this.handleInputChange.bind(this)} />  {/* first line 写死只读 需要监听并改变this对象 */}
-            <button onClick={this.handleBtnClick.bind(this)}>submit</button></div>
+                        onChange={this.handleInputChange} /> 
+            <button onClick={this.handleBtnClick}>submit</button>
+            </div>
             <ul>
-                {
-                    this.state.list.map((item,index) => {
-                    return (
-                        <div>
-                        <TodoItem 
-                        content={item} 
-                        index={index}
-                        deleteItem={this.handleItemDelete.bind(this)}/>
-                        </div>
-                        )
-                    })
-                }
+                {this.getTodoItem()}
 
             </ul>
         </Fragment>
     )
     }
-    handleInputChange(e) {
-        console.log(this.state)
-        //console.log(e.target.value);
-        //不能通过直接引用改变值 必须用setState
-        this.setState({
-            inputValue: e.target.value
+
+getTodoItem() {
+
+    return this.state.list.map((item,index) => {
+        return (
+            <TodoItem 
+            key={index}
+            content={item} 
+            index={index}
+            deleteItem={this.handleItemDelete}/>
+            )
         })
+}
+
+    handleInputChange(e) {
+        const value = e.target.value;
+        this.setState(() => ({
+                inputValue : value
+        }));
     }
     handleBtnClick(){
-        this.setState({
-            list: [...this.state.list, this.state.inputValue], //展开运算符, 把以前的内容展开生成新的数组
+        this.setState((prevState) =>({
+            list: [...prevState.list, prevState.inputValue], //展开运算符, 把以前的内容展开生成新的数组
             inputValue: ''
-        })
-
+        }));
     }
     handleItemDelete(index){
         // immutable
         // state not allow user do any change
-        const list = [...this.state.list];
-        list.splice(index, 1); // delete index
-
-        this.setState({
-            list: list
-        })
-        console.log(index)
+        this.setState((prevState) => {
+            const list = [...prevState.list];
+            list.splice(index, 1);
+            return {list}
+        });
+        console.log(index);
     }
 }
 
