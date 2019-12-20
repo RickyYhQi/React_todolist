@@ -1,10 +1,12 @@
 import React, {Component,Fragment} from 'react';
 import TodoItem from './TodoItem';
+
 import './style.css';
 
 class TodoList extends Component{
     constructor(props) {
         super(props);
+        // 当组件state和props发生变化时 render就重新执行
         this.state = { //state 负责存储组件数据
             inputValue: '',
             list: []
@@ -13,6 +15,14 @@ class TodoList extends Component{
         this.handleBtnClick = this.handleBtnClick.bind(this);
         this.handleItemDelete = this.handleItemDelete.bind(this);
     }
+
+    //在组件即将被挂载到页面的时候执行componentWillMount
+
+    //在组件被更新之前 会自动执行shouldComponentUpdata return true or false
+    //组件被更新之前会被自动执行componentwillupdate 如果should 返回true则执行
+    //组件更新之后执行render之后会执行componentdidupdate
+
+    
     render(){
     return (
         <Fragment>
@@ -24,23 +34,25 @@ class TodoList extends Component{
                 <input  id='insertArea'
                         className='input'
                         value={this.state.inputValue}    
-                        onChange={this.handleInputChange} /> 
+                        onChange={this.handleInputChange}
+                        ref={(input) => {this.input = input}} /> 
             <button onClick={this.handleBtnClick}>submit</button>
             </div>
-            <ul>
+            <ul ref={(ul) => {this.ul = ul}}>
                 {this.getTodoItem()}
-
             </ul>
+
         </Fragment>
     )
     }
+// 在组件被挂载之后自动执行componentDidMount
 
 getTodoItem() {
 
     return this.state.list.map((item,index) => {
         return (
             <TodoItem 
-            key={index}
+            key={item}
             content={item} 
             index={index}
             deleteItem={this.handleItemDelete}/>
@@ -48,8 +60,8 @@ getTodoItem() {
         })
 }
 
-    handleInputChange(e) {
-        const value = e.target.value;
+    handleInputChange() {
+        const value = this.input.value;
         this.setState(() => ({
                 inputValue : value
         }));
@@ -58,7 +70,9 @@ getTodoItem() {
         this.setState((prevState) =>({
             list: [...prevState.list, prevState.inputValue], //展开运算符, 把以前的内容展开生成新的数组
             inputValue: ''
-        }));
+        }), () => {
+            console.log(this.ul.querySelectorAll('div').length);
+        });
     }
     handleItemDelete(index){
         // immutable
