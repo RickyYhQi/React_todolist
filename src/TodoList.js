@@ -1,6 +1,6 @@
 import React, {Component,Fragment} from 'react';
 import TodoItem from './TodoItem';
-
+import axios from 'axios';
 import './style.css';
 
 class TodoList extends Component{
@@ -22,6 +22,8 @@ class TodoList extends Component{
     //组件被更新之前会被自动执行componentwillupdate 如果should 返回true则执行
     //组件更新之后执行render之后会执行componentdidupdate
 
+
+
     
     render(){
     return (
@@ -35,7 +37,7 @@ class TodoList extends Component{
                         className='input'
                         value={this.state.inputValue}    
                         onChange={this.handleInputChange}
-                        ref={(input) => {this.input = input}} /> 
+                 /> 
             <button onClick={this.handleBtnClick}>submit</button>
             </div>
             <ul ref={(ul) => {this.ul = ul}}>
@@ -44,6 +46,12 @@ class TodoList extends Component{
 
         </Fragment>
     )
+    }
+
+
+    componentDidMount() {
+        axios.get('/api/todolist').then(() => alert('succ')).catch(()=>alert('error'))
+        // put ajax request
     }
 // 在组件被挂载之后自动执行componentDidMount
 
@@ -60,8 +68,8 @@ getTodoItem() {
         })
 }
 
-    handleInputChange() {
-        const value = this.input.value;
+    handleInputChange(e) {
+        const value = e.target.value;
         this.setState(() => ({
                 inputValue : value
         }));
@@ -70,9 +78,7 @@ getTodoItem() {
         this.setState((prevState) =>({
             list: [...prevState.list, prevState.inputValue], //展开运算符, 把以前的内容展开生成新的数组
             inputValue: ''
-        }), () => {
-            console.log(this.ul.querySelectorAll('div').length);
-        });
+        }));
     }
     handleItemDelete(index){
         // immutable
