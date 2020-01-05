@@ -3,9 +3,8 @@ import 'antd/dist/antd.css';
 import { Input,Button } from 'antd';
 
 import { List, Typography } from 'antd';
-
+import { getInputChangeAction, getAddItemAction, getDeleteItemAction } from './store/actionCreators'
 import store from'./store/index.js'; // './store'
-import { CHANGE_INPUT_VALUE, ADD_TODO_ITEM, DELETE_TODO_ITEM} from './store/actionTypes.js';
 
 
 
@@ -47,10 +46,7 @@ class TodoList extends Component {
     }
 
     handleInputChange(e) {
-        const action = {
-            type: CHANGE_INPUT_VALUE,
-            value: e.target.value
-        }
+        const action = getInputChangeAction(e.target.value);
         store.dispatch(action);
     }
 
@@ -59,17 +55,12 @@ class TodoList extends Component {
     }
 
     handleBtnClick() {
-        const action = {
-            type: ADD_TODO_ITEM,
-        };
+        const action = getAddItemAction();
         store.dispatch(action);
     }
 
     handleItemDelete(index) {
-        const action = {
-            type: DELETE_TODO_ITEM,
-            index
-        }
+        const action = getDeleteItemAction(index);
         store.dispatch(action);
     }
  }
