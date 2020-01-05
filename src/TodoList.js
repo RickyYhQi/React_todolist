@@ -5,6 +5,9 @@ import { Input,Button } from 'antd';
 import { List, Typography } from 'antd';
 
 import store from'./store/index.js'; // './store'
+import { CHANGE_INPUT_VALUE, ADD_TODO_ITEM, DELETE_TODO_ITEM} from './store/actionTypes.js';
+
+
 
 class TodoList extends Component {
 
@@ -33,8 +36,8 @@ class TodoList extends Component {
         style={{width:'300px', marginTop: '10px'}}
         bordered
         dataSource={this.state.list}
-        renderItem={item => (
-          <List.Item>
+        renderItem={(item, index) => (
+          <List.Item onClick={this.handleItemDelete.bind(this, index)}>
             <Typography.Text mark></Typography.Text> {item}
           </List.Item>
         )}
@@ -45,7 +48,7 @@ class TodoList extends Component {
 
     handleInputChange(e) {
         const action = {
-            type: 'change_input_value',
+            type: CHANGE_INPUT_VALUE,
             value: e.target.value
         }
         store.dispatch(action);
@@ -57,8 +60,16 @@ class TodoList extends Component {
 
     handleBtnClick() {
         const action = {
-            type: 'add_todo_item'
+            type: ADD_TODO_ITEM,
         };
+        store.dispatch(action);
+    }
+
+    handleItemDelete(index) {
+        const action = {
+            type: DELETE_TODO_ITEM,
+            index
+        }
         store.dispatch(action);
     }
  }
