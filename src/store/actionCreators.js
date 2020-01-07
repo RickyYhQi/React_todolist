@@ -13,3 +13,16 @@ export const getDeleteItemAction = (index) => ({
     type: DELETE_TODO_ITEM,
     index
 });
+
+//principle of designing redux
+// store is unique
+// only sotre can update itself
+// reducer must be a pure function (given fix input must have fix output)
+// best to keep the original input value for reducer(just use deep copy)
+
+
+// core API
+// createStore
+// store.dispatch
+// store.getState
+// store.subscribe
