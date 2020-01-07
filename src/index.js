@@ -1,8 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TodoList from './TodoList';
+import  { Provider } from 'react-redux';
+import store from './store';
+
+
+const App = (
+    <Provider store={store}>
+        <TodoList />
+    </Provider>
+)
 // 如果我们要使用自己创建的组件 直接使用标签名字， 组件开头必须要大写
-ReactDOM.render(<TodoList />, document.getElementById('root'));
+
+
+
+ReactDOM.render( App , document.getElementById('root'));
+
+
+
 //jsx syntax must import react
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
